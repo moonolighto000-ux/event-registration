@@ -1,6 +1,6 @@
 package kz.iitu.registration.controller;
 
-import kz.iitu.registration.model.EventInfo;
+import kz.iitu.registration.model.Event;
 import kz.iitu.registration.service.EventService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,29 +20,29 @@ public class RegistrationController {
     }
 
     @GetMapping("/events")
-    public List<EventInfo> getEvents(@RequestParam(required = false) String title) {
+    public List<Event> getEvents(@RequestParam(required = false) String title) {
         return eventService.getAllEvents(title);
     }
 
     @GetMapping("/events/{id}")
-    public ResponseEntity<EventInfo> getEventById(@PathVariable int id) {
+    public ResponseEntity<Event> getEventById(@PathVariable Long id) {
         return eventService.getEventById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/events")
-    public ResponseEntity<?> createEvent(@RequestBody EventInfo request) {
+    public ResponseEntity<?> createEvent(@RequestBody Event request) {
         if (request == null || isBlank(request.getTitle()) || isBlank(request.getLocation())) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", "title and location must not be blank"));
         }
-        EventInfo created = eventService.createEvent(request.getTitle(), request.getLocation());
+        Event created = eventService.createEvent(request.getTitle(), request.getLocation());
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/events/{id}")
-    public ResponseEntity<?> updateEvent(@PathVariable int id, @RequestBody EventInfo request) {
+    public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestBody Event request) {
         if (request == null || isBlank(request.getTitle()) || isBlank(request.getLocation())) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", "title and location must not be blank"));
@@ -53,7 +53,7 @@ public class RegistrationController {
     }
 
     @DeleteMapping("/events/{id}")
-    public ResponseEntity<Void> deleteEvent(@PathVariable int id) {
+    public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
         boolean deleted = eventService.deleteEvent(id);
         if (deleted) {
             return ResponseEntity.noContent().build();

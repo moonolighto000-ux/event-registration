@@ -1,20 +1,21 @@
 # Event Registration REST API
 
-A Spring Boot RESTful web service for managing events with full CRUD functionality (`GET`, `POST`, `PUT`, `DELETE`), in-memory storage, input validation, and standard HTTP status codes.
+A Spring Boot REST API for managing events, migrated from in-memory storage to persistent PostgreSQL storage using Spring Data JPA.
 
 ## Tech Stack
-- Java 17+
-- Spring Boot (Spring Web)
-- Gradle
-- Postman (for API testing)
+- **Java** & **Spring Boot** (Web MVC, Spring Data JPA)
+- **PostgreSQL** (`event_db`)
+- **Gradle**
 
 ## Project Structure
 ```text
 src/main/java/kz/iitu/registration/
 ├── controller/
-│   └── RegistrationController.java   # REST endpoints and request validation
+│   └── RegistrationController.java   # REST endpoints & request validation
 ├── model/
-│   └── EventInfo.java                # Event entity (id, title, location)
+│   └── Event.java                    # JPA entity mapped to the "events" table
+├── repository/
+│   └── EventRepository.java          # Spring Data JPA repository
 ├── service/
-│   └── EventService.java             # In-memory storage and CRUD business logic
+│   └── EventService.java             # Business logic & persistence operations
 └── EventRegistrationApiApplication.java
